@@ -5,4 +5,8 @@ interface Props {
 }
 const { url, height = "600px" } = Astro.props as Props;
 ---
-<iframe src={url} style={`width: 100%; height: ${height};`}></iframe>
+
+<iframe
+  src={url}
+  style={`width: 100%; height: ${height};`}
+  title="stackblitz hosted code"></iframe>
