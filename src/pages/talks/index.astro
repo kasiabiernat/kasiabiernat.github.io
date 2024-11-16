@@ -26,30 +26,28 @@ const talks = await Promise.all(
           talks.map((entry) => (
             <li class="animate">
               <div class="group py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out">
-                <div class="grid gap-4 grid-cols-[auto_1fr]">
-                    <div class="table-cell text-left pr-4 font-semibold">Title:</div>
-                    <div class="table-cell">
-                      <p class="block font-sans text-lg antialiased font-semibold leading-relaxed mb-2">
-                        {entry.data.title}
-                      </p>
-                    </div>
-                    <div class="table-cell text-left pr-4 font-semibold">Description:</div>
-                    <div class="table-cell">
-                      <p class="block font-sans text-sm antialiased font-normal leading-normal opacity-75">
+                <div class="grid gap-2 md:gap-4 grid-cols-1 md:grid-cols-[auto_1fr]">
+                    <div class="text-left pr-4 font-semibold">Title</div>
+                    <p class="font-sans antialiased font-semibold leading-relaxed mb-2">
+                      {entry.data.title}
+                    </p>
+                    <div class="text-left pr-4 font-semibold pt-4 md:pt-0">Description</div>
+                    <div>
+                      <p class="font-sans text-sm antialiased font-normal leading-normal opacity-75">
                         <entry.Content />
                       </p>
                     </div>
                   {entry.data.slides && (
-                      <div class="table-cell text-left pr-4 font-semibold">Slides:</div>
-                      <div class="table-cell">
+                      <div class="text-left pr-4 font-semibold pt-4 md:pt-0">Slides</div>
+                      <div>
                         <Link href={entry.data.slides} external>
                           {entry.data.slides}
                         </Link>
                       </div>
                   )}
                   {entry.data.repository && (
-                      <div class="table-cell text-left pr-4 font-semibold">Repo:</div>
-                      <div class="table-cell">
+                      <div class="text-left pr-4 font-semibold pt-4 md:pt-0">Repo</div>
+                      <div>
                         <Link href={entry.data.repository} external>
                           {entry.data.repository}
                         </Link>
