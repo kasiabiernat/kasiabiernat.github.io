@@ -1,0 +1,159 @@
+---
+title: "Enhance your form fields with the power of Angular directives and control value accessor"
+description: "Angular directives is a powerful tool that allows developers to extend the capabilities and add custom behavior to the DOM elements, making our Angular applications more flexible and maintainable. A control value accessor in Angular is an..."
+date: "Sept 21 2024"
+cover: "cover"
+---
+import StackBlitz from '../../../components/StackBlitz.astro';
+
+Angular directives is a powerful tool that allows developers to extend the capabilities and add custom behavior to the DOM elements, making our Angular applications more flexible and maintainable.
+
+A control value accessor in Angular is an interface that acts as a bridge between Angular forms and native DOM elements or custom form controls. It allows custom form controls to integrate seamlessly with Angular’s form directives and validation system by implementing methods to write values to the DOM element and read values from it.
+
+So what will happen if we combine these two? Let's explore!
+
+## Prerequisites:
+
+- Basic understanding of Angular directives
+- Basic understanding of Angular control value accessor
+
+## The use case
+
+Recently I've run into the requirement where I had to build a form that would accept an object like this:
+
+```tsx
+  interface Size {
+    width: string;
+    height: string;
+  }
+
+  const size: Size = {
+    width: '12px',
+    height: '15px',
+  };
+```
+
+The tricky part was, that the form controls rendered should be number inputs but the actual values that go in or out of the form controls are strings (the number value with `px` suffix).
+
+## The solution
+
+First, let's create a form
+
+```tsx
+form = new FormGroup({
+   width: new FormControl<string>(''),
+   height: new FormControl<string>(''),  
+});
+```
+
+```html
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-form-field>
+     <mat-label>Width</mat-label>
+     <input
+        type="number"
+        matInput
+        [formControl]="form.controls.width"
+     />
+   </mat-form-field>
+   <mat-form-field>
+     <mat-label>Height</mat-label>
+     <input
+        type="number"
+        matInput
+        [formControl]="form.controls.height"
+     />
+   </mat-form-field>
+</form>
+```
+
+Here comes the problem — our height and width are of type string and inputs that need to be rendered are numbers.
+
+We could either transform these values in the component’s code or we could use the power of Angular directives and Control Value Accessor and do it a smarter way.
+
+Consider following directive:
+
+```tsx
+@Directive({
+  selector: '[suffix-number-input]',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SuffixNumberInputDirective),
+      multi: true,
+    },
+  ],
+  standalone: true,
+})
+export class SuffixNumberInputDirective implements ControlValueAccessor {
+  private value?: number | null;
+  @Input('suffix-number-input') suffix = '';
+
+  private onChange: (value: any) => void = () => {};
+  private onTouched: () => void = () => {};
+
+  constructor(private el: ElementRef) {}
+
+  @HostListener('input', ['$event.target.value'])
+  onInput(value: string) {
+    this.value = this.parseValue(value);
+    this.onChange(this.value);
+  }
+
+  @HostListener('blur')
+  onBlur() {
+    this.onTouched();
+  }
+
+  writeValue(value?: string | number | null): void {
+    this.value = this.parseValue(value);
+    this.el.nativeElement.value = this.value;
+  }
+
+  registerOnChange(fn: (value: any) => void): void {
+    this.onChange = (value?: number) => {
+      fn(value ? `${value}${this.suffix}` : value);
+    };
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.el.nativeElement.disabled = isDisabled;
+  }
+
+  private parseValue(
+    value?: string | number | null
+  ): number | null | undefined {
+    if (typeof value === 'string') {
+      const parsed = parseInt(value.replace(this.suffix, ''), 10);
+      return isNaN(parsed) ? undefined : parsed;
+    }
+
+    return value;
+  }
+}
+```
+
+When applied on an input, this directive will accept “12px” and transform it into “12” but at the same time the number entered by the user will be transformed back into string making the form result consistent with desired format.
+
+## The implementation
+
+<StackBlitz
+  url="https://stackblitz.com/edit/yypdyr-ng6yxe?ctl=1&embed=1&file=src%2Fmain.ts"
+/>
+
+## Conclusion
+
+Both directives and control value accessor are powerful but ofter underused features of Angular. I encourage you to take advantage of them and leverage you app to the next level.
+
+I have merely presented a single use case however the possibilities are endless. I hope that you will find it useful for your next Angular project :)
+
+## Further reading
+
+- [https://angular.dev/guide/forms/reactive-forms](https://angular.dev/guide/forms/reactive-forms)
+- [https://blog.angular-university.io/angular-custom-form-controls/](https://blog.angular-university.io/angular-custom-form-controls/)
+- [https://timdeschryver.dev/blog/use-angular-directives-to-extend-components-that-you-dont-own#default-directive](https://timdeschryver.dev/blog/use-angular-directives-to-extend-components-that-you-dont-own#default-directive)
+- [https://medium.com/@pawel.kubiak.dev/directives-in-practice-user-role-based-element-control-47ac72820847](https://medium.com/@pawel.kubiak.dev/directives-in-practice-user-role-based-element-control-47ac72820847)
