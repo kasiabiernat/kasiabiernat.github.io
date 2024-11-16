@@ -2,7 +2,7 @@
 title: "Replace your another long ngSwitch with an Angular component factory directive"
 description: "Sometimes you have to implement several similar components, that are displayed on your UI based on the provided conditions. Usually, you’d use the switch case clause for it (ngSwitch). But what if..."
 date: "Oct 29 2023"
-cover: "cover.webp"
+cover: "cover"
 ---
 
 Sometimes you have to implement several similar components, that are displayed on your UI based on the provided conditions. Usually, you’d use the switch case clause for it (ngSwitch). But what if your switch case endlessly grows and gets more and more complicated? Here comes a factory pattern, that can largely improve your code.

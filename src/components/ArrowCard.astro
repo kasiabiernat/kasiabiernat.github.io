@@ -8,7 +8,7 @@ type Props = {
 
 const { entry } = Astro.props;
 const coverImage = await import(
-  `../content/blog/${entry.slug}/${entry.data.cover}`
+  `../content/blog/${entry.slug}/${entry.data.cover}.webp`
 );
 ---
 

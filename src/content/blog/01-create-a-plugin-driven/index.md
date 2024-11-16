@@ -2,7 +2,7 @@
 title: "Create a plugin driven application using the power of Angular Injection Tokens"
 description: "Dependency injection (DI) is a powerful pattern that Angular provides out of the box. Its capabilities can be enhanced using injection tokens..."
 date: "Oct 7 2023"
-cover: "cover.webp"
+cover: "cover"
 ---
 
 Dependency injection (DI) is a powerful pattern that Angular provides out of the box. Its capabilities can be enhanced using injection tokens.
