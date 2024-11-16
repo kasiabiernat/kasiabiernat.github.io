@@ -16,32 +16,35 @@ const coverImage = await import(
   href={`/${entry.collection}/${entry.slug}`}
   class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out"
 >
-  <div class="flex flex-col flex-1">
-    {
-      coverImage && (
-        <div class="overflow-hidden rounded-lg">
-          <Image
-            src={coverImage.default}
-            alt={`Cover image for ${entry.data.title}`}
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-      )
-    }
-    <div class="mt-4">
+  <div class="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6 p-2">
+    <div class="order-2 md:order-1">
       <p
-        class="block font-sans text-base antialiased font-medium leading-relaxed mb-2"
+        class="block font-sans text-justify text-base antialiased font-medium leading-relaxed mb-2"
       >
         {entry.data.title}
       </p>
       <p
-        class="block font-sans text-sm antialiased font-normal leading-normal opacity-75"
+        class="block font-sans text-justify text-sm antialiased font-normal leading-normal opacity-75"
       >
         {entry.data.description}
       </p>
     </div>
+    <div class="order-1 md:order-2">
+      {
+        coverImage && (
+          <div class="overflow-hidden rounded-lg">
+            <Image
+              src={coverImage.default}
+              alt={`Cover image for ${entry.data.title}`}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        )
+      }
+    </div>
   </div>
+
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
