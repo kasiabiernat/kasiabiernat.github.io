@@ -15,7 +15,7 @@ import { PAGES, SITE } from "@consts";
       <nav class="flex gap-5">
         {
           Object.values(PAGES).map((PAGE) => (
-            <Link href={PAGE.HREF}>{PAGE.TITLE}</Link>
+            <Link href={PAGE.HREF}>{PAGE.TITLE.toLowerCase()}</Link>
           ))
         }
       </nav>

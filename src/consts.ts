@@ -9,33 +9,20 @@ export const SITE: Site = {
 
 export const PAGES: { [key: string]: Page } = {
   HOME: {
-    TITLE: "home",
+    TITLE: "Home",
     HREF: "/",
     DESCRIPTION: "Personal homepage",
   },
   BLOG: {
-    TITLE: "blog",
+    TITLE: "Blog",
     HREF: "/blog",
     DESCRIPTION: "A collection of articles on topics I am passionate about",
   },
-  NAME: {
-    TITLE: "talks",
+  TALKS: {
+    TITLE: "Talks",
     HREF: "/talks",
     DESCRIPTION: "My talks and presentations.",
   },
-};
-
-// remove
-export const WORK = {
-  TITLE: "Work",
-  DESCRIPTION: "Where I have worked and what I have done.",
-};
-
-// remove
-export const PROJECTS = {
-  TITLE: "Projects",
-  DESCRIPTION:
-    "A collection of my projects, with links to repositories and demos.",
 };
 
 export const SOCIALS: Socials = [

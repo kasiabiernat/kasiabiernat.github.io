@@ -1,0 +1,70 @@
+---
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+import { PAGES } from "@consts";
+import Link from "@components/Link.astro";
+
+const collection = (await getCollection("talks")).sort();
+
+const talks = await Promise.all(
+  collection.map(async (item) => {
+    const { Content } = await item.render();
+    return { ...item, Content };
+  })
+);
+---
+
+<PageLayout title={PAGES.TALKS.TITLE} description={PAGES.TALKS.DESCRIPTION}>
+  <Container>
+    <div class="space-y-10">
+      <div class="animate font-semibold text-black dark:text-white">
+        My talks
+      </div>
+      <ul class="flex flex-col space-y-4">
+        {
+          talks.map((entry) => (
+            <li class="animate">
+              <div class="group py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out">
+                <div class="grid gap-4 grid-cols-[auto_1fr]">
+                    <div class="table-cell text-left pr-4 font-semibold">Title:</div>
+                    <div class="table-cell">
+                      <p class="block font-sans text-lg antialiased font-semibold leading-relaxed mb-2">
+                        {entry.data.title}
+                      </p>
+                    </div>
+                    <div class="table-cell text-left pr-4 font-semibold">Description:</div>
+                    <div class="table-cell">
+                      <p class="block font-sans text-sm antialiased font-normal leading-normal opacity-75">
+                        <entry.Content />
+                      </p>
+                    </div>
+                  {entry.data.slides && (
+                      <div class="table-cell text-left pr-4 font-semibold">Slides:</div>
+                      <div class="table-cell">
+                        <Link href={entry.data.slides} external>
+                          {entry.data.slides}
+                        </Link>
+                      </div>
+                  )}
+                  {entry.data.repository && (
+                      <div class="table-cell text-left pr-4 font-semibold">Repo:</div>
+                      <div class="table-cell">
+                        <Link href={entry.data.repository} external>
+                          {entry.data.repository}
+                        </Link>
+                      </div>
+                  )}
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+      <!-- 
+      <ul class="animate flex flex-col gap-4">
+
+      </ul> -->
+    </div>
+  </Container>
+</PageLayout>

@@ -21,9 +21,9 @@ type Props = CollectionEntry<"blog">;
 const post = Astro.props;
 const { Content } = await post.render();
 
-const coverImage =
-  post.data.cover &&
-  (await import(`../../content/blog/${post.slug}/${post.data.cover}`));
+const coverImage = await import(
+  `../../content/blog/${post.slug}/${post.data.cover}`
+);
 ---
 
 <PageLayout title={post.data.title} description={post.data.description}>
