@@ -48,12 +48,14 @@ const coverImage = await import(
     <article class="animate">
       {
         coverImage && (
-          <Image
-            src={coverImage.default}
-            alt={`Cover image for ${post.data.title}`}
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="overflow-hidden rounded-lg">
+            <Image
+              src={coverImage.default}
+              alt={`Cover image for ${post.data.title}`}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         )
       }
       <Content />
