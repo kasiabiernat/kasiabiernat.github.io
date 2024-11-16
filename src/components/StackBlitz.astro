@@ -1,0 +1,8 @@
+---
+interface Props {
+  url: string;
+  height?: string;
+}
+const { url, height = "600px" } = Astro.props as Props;
+---
+<iframe src={url} style={`width: 100%; height: ${height};`}></iframe>

@@ -1,7 +1,7 @@
 import type { Site, Socials, Page } from "@types";
 
 export const SITE: Site = {
-  NAME: "Kasia Biernat-Kluba",
+  NAME: "Kasia Biernat-Kluba 👩‍💻",
   EMAIL: "k.biernat0@gmail.com",
   NUM_POSTS_ON_HOMEPAGE: 3,
   NUM_TALKS_ON_HOMEPAGE: 3,
