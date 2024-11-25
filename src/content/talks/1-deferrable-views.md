@@ -1,6 +1,6 @@
 ---
 title: "From lag to lightning: optimize Angular app performance with deferrable views"
-slides: "https://bit.ly/4hTGql0"
+slides: "https://bit.ly/3OrErHs"
 repository: "https://github.com/kathrine0/deferred-demo/"
 ---
 
