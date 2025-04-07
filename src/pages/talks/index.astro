@@ -7,12 +7,12 @@ import Link from "@components/Link.astro";
 
 const collection = (await getCollection("talks")).sort();
 
-const talks = await Promise.all(
+const talks = (await Promise.all(
   collection.map(async (item) => {
     const { Content } = await item.render();
     return { ...item, Content };
   })
-);
+)).sort((a, b) => b.id.localeCompare(a.id));
 ---
 
 <PageLayout title={PAGES.TALKS.TITLE} description={PAGES.TALKS.DESCRIPTION}>
@@ -23,7 +23,8 @@ const talks = await Promise.all(
       </div>
       <ul class="flex flex-col space-y-4">
         {
-          talks.map((entry) => (
+          talks
+          .map((entry) => (
             <li class="animate">
               <div class="group py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out">
                 <div class="grid gap-2 md:gap-4 grid-cols-1 md:grid-cols-[auto_1fr]">
