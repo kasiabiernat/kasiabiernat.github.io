@@ -30,7 +30,7 @@ header {
 }
 
 main {
-  @apply flex-1 py-32;
+  @apply flex-1 py-24;
 }
 
 footer {
@@ -53,6 +53,13 @@ article {
     @apply text-black dark:text-white;
     @apply decoration-black/25 dark:decoration-white/50;
   }
+
+}
+
+.mask-fade {
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
 }
 
 .animate {

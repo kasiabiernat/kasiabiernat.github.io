@@ -5,6 +5,8 @@ import PageLayout from "@layouts/PageLayout.astro";
 import ArrowCard from "@components/ArrowCard.astro";
 import Link from "@components/Link.astro";
 import { SITE, PAGES, SOCIALS } from "@consts";
+import { Image } from 'astro:assets';
+import kasia from "./kasia-biernat-kluba.png";
 
 const blog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
@@ -32,26 +34,36 @@ const activitiesAndAppearances =
       Hi, I'm Kasia <span class="text-xl">👋🏻</span>
     </h1>
     <div class="space-y-16">
-      <section class="animate space-y-6">
-        <article class="space-y-4">
+      <section class="animate flex flex-col md:flex-row items-stretch gap-4" >
+        <article class="space-y-4 md:w-3/4 w-full">
           <p>
             I am a software engineer and a web developer. My main area of
             expertise is
             <strong>Angular</strong>, but I also have experience with backend
             technologies, such as <strong>Node.js</strong> and <strong
-              >.NET</strong
+            >.NET</strong
             >.
           </p>
           <p>
             I am an occasional speaker at tech meetups and conferences. You can
             also find me on
             <Link
-              href="https://www.meetup.com/ngkato/"
-              aria-label="NgKato on meetup.com"
-              external>NgKato</Link
+            href="https://www.meetup.com/ngkato/"
+            aria-label="NgKato on meetup.com"
+            external>NgKato</Link
             > meetups that is hosted on regular basis in Katowice, where I am a co-organizer.
           </p>
         </article>
+
+        <div class="relative md:-mt-20 md:w-1/4 w-full max-w-[200px] self-center min-h-[200px]">
+          <div class="absolute inset-0 overflow-hidden -mb-10">
+            <Image 
+            src={kasia} 
+            alt="Kasia Biernat-Kluba" 
+            class="w-full h-full object-cover object-top mask-fade" 
+          />
+          </div>
+        </div>
       </section>
 
       <section class="animate space-y-6">
