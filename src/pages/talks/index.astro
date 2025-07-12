@@ -54,6 +54,14 @@ const talks = (await Promise.all(
                         </Link>
                       </div>
                   )}
+                  {entry.data.recording && (
+                      <div class="text-left pr-4 font-semibold pt-4 md:pt-0">Recording</div>
+                      <div>
+                        <Link href={entry.data.recording} external>
+                          {entry.data.recording}
+                        </Link>
+                      </div>
+                  )}
                 </div>
               </div>
             </li>

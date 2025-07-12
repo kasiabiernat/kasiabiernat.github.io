@@ -1,6 +1,7 @@
 ---
 title: "From SSR to Client-Side: The Power of Incremental Hydration"
 slides: "https://bit.ly/4j5B32G"
+recording: "https://www.youtube.com/watch?v=Yh7WS9Ze42I"
 ---
 
 Angular Server-Side Rendering (SSR) significantly improves load times and SEO, but the transition to client-side rendering can still be slow.

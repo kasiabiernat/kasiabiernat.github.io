@@ -17,6 +17,7 @@ const talks = defineCollection({
     title: z.string(),
     slides: z.string().optional(),
     repository: z.string().optional(),
+    recording: z.string().optional(),
   }),
 });
 
