@@ -1,0 +1,64 @@
+[
+    {
+        "id": "1",
+        "language": "pl",
+        "date": "2022-03-29",
+        "name": "Synergy Cafe video",
+        "link": "https://www.youtube.com/watch?v=LiOEQp-Y2kI&t=80s"
+    },
+    {
+        "id": "2",
+        "language": "pl",
+        "date": "2024-09-26",
+        "name": "Angular Wrocław meetup #40",
+        "link": "https://www.meetup.com/angularwroclaw/events/303048810"
+    },
+    {
+        "id": "3",
+        "language": "pl",
+        "date": "2024-11-28",
+        "name": "NgKato meetup #3",
+        "link": "https://www.meetup.com/ngkato/events/304381105"
+    },
+    {
+        "id": "4",
+        "language": "pl",
+        "date": "2024-12-04",
+        "name": "4Developers Łódź 2024",
+        "link": "https://crossweb.pl/wydarzenia/4developers-lodz-2024/"
+    },
+    {
+        "id": "5",
+        "language": "en",
+        "date": "2024-12-05",
+        "name": "Angular Christmas Calendar Video",
+        "link": "https://angularchristmascalendar.com/"
+    },
+    {
+        "id": "6",
+        "language": "pl",
+        "date": "2025-02-19",
+        "name": "ngLodz meetup #15",
+        "link": "https://meetup.com/ng-lodz/events/305841543/"
+    },
+    {
+        "id": "7",
+        "language": "en",
+        "date": "2025-03-14",
+        "name": "NG Venice Conference 2025"
+    },
+    {
+        "id": "8",
+        "language": "en",
+        "date": "2025-04-12",
+        "name": "Ng-India Conference 2025",
+        "link": "https://www.youtube.com/watch?v=Yh7WS9Ze42I"
+    },
+    {
+        "id": "9",
+        "language": "pl",
+        "date": "2025-07-09",
+        "name": "Angular Wrocław meetup #44",
+        "link": "https://www.meetup.com/angularwroclaw/events/308539473/"
+    }
+]

@@ -10,13 +10,27 @@ const blog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+
+const activitiesAndAppearances = 
+  Object.entries(
+    Object.groupBy(
+      (await getCollection("activitiesAndAppearances")),
+      ({ data }) => data.date.getFullYear()
+    )
+  ).map(([year, groupItems]) => ({
+      year: Number(year),
+      activities: groupItems?.map(item => item.data).sort(
+        (a, b) => b.date.valueOf() - a.date.valueOf()
+      ) ?? []
+  }))
+  .sort(({ year: yearA }, { year: yearB }) => yearB - yearA);
 ---
 
 <PageLayout title={PAGES.HOME.TITLE} description={PAGES.HOME.DESCRIPTION}>
   <Container>
-    <h4 class="animate font-semibold text-black dark:text-white">
+    <h1 class="animate font-semibold text-lg text-black dark:text-white">
       Hi, I'm Kasia <span class="text-xl">👋🏻</span>
-    </h4>
+    </h1>
     <div class="space-y-16">
       <section class="animate space-y-6">
         <article class="space-y-4">
@@ -42,7 +56,7 @@ const blog = (await getCollection("blog"))
 
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">Latest posts</h5>
+          <h1 class="font-semibold text-black text-lg dark:text-white">Latest posts</h1>
           <Link href="/blog"> See all posts </Link>
         </div>
         <ul class="flex flex-col gap-4">
@@ -55,8 +69,39 @@ const blog = (await getCollection("blog"))
           }
         </ul>
       </section>
+      <section class="animate space-y-6">
+        <div class="flex flex-wrap gap-y-2 items-center justify-between">
+          <h1 class="font-semibold text-black text-lg dark:text-white">
+            Public appearances
+          </h1>
+          <Link href="/talks"> See all talks </Link>
+        </div>
+
+        {
+          activitiesAndAppearances.map(({year, activities}) => (
+            <h2 class="font-semibold text-black dark:text-white">
+              {year}
+            </h2>
+            <ul class="flex flex-col gap-4 list-disc pl-6">
+              {
+                activities.map((activity) => (
+                  <li>
+                    {activity.link && (
+                      <Link href={activity.link} external>
+                      {activity.name}
+                    </Link>
+                    ) || (
+                      <span>{activity.name}</span>
+                    )}
+                  </li>
+                ))
+              }
+            </ul>
+          ))
+        }
+      </section>
       <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">Let's Connect</h5>
+        <h1 class="font-semibold text-lg text-black dark:text-white">Let's Connect</h1>
         <article>
           <p>
             If you want to get in touch with me about something or just to say

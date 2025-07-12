@@ -1,3 +1,4 @@
+import { file } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
 const blog = defineCollection({
@@ -21,4 +22,14 @@ const talks = defineCollection({
   }),
 });
 
-export const collections = { blog, talks };
+const activitiesAndAppearances = defineCollection({
+  loader: file("src/content/activities-and-appearances/activities-and-appearances.json"),
+  schema: z.object({
+    language: z.enum(["en", "pl"]),
+    date: z.coerce.date(),
+    name: z.string(),
+    link: z.string().optional(),
+  }),
+});
+
+export const collections = { blog, talks, activitiesAndAppearances };
