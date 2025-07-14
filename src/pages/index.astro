@@ -30,7 +30,7 @@ const activitiesAndAppearances =
 
 <PageLayout title={PAGES.HOME.TITLE} description={PAGES.HOME.DESCRIPTION}>
   <Container>
-    <h1 class="animate font-semibold text-lg text-black dark:text-white">
+    <h1 id="introduction" class="animate font-semibold text-lg text-black dark:text-white">
       Hi, I'm Kasia <span class="text-xl">👋🏻</span>
     </h1>
     <div class="space-y-16">
@@ -68,7 +68,7 @@ const activitiesAndAppearances =
 
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h1 class="font-semibold text-black text-lg dark:text-white">Latest posts</h1>
+          <h1 id="latest-posts" class="font-semibold text-black text-lg dark:text-white">Latest posts</h1>
           <Link href="/blog"> See all posts </Link>
         </div>
         <ul class="flex flex-col gap-4">
@@ -83,7 +83,7 @@ const activitiesAndAppearances =
       </section>
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h1 class="font-semibold text-black text-lg dark:text-white">
+          <h1 id="public-appearances" class="font-semibold text-black text-lg dark:text-white">
             Public appearances
           </h1>
           <Link href="/talks"> See all talks </Link>
