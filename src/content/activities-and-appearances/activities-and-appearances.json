@@ -60,5 +60,12 @@
         "date": "2025-07-09",
         "name": "Angular Wrocław meetup #44",
         "link": "https://www.meetup.com/angularwroclaw/events/308539473/"
+    },
+    {
+        "id": "10",
+        "language": "pl",
+        "date": "2025-08-20",
+        "name": "ngLodz meetup #19",
+        "link": "https://www.meetup.com/ng-lodz/events/310387380/"
     }
 ]
