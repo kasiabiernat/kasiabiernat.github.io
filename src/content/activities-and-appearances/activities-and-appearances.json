@@ -67,5 +67,12 @@
         "date": "2025-08-20",
         "name": "ngLodz meetup #19",
         "link": "https://www.meetup.com/ng-lodz/events/310387380/"
+    },
+    {
+        "id": "11",
+        "language": "pl",
+        "date": "2025-08-28",
+        "name": "Angular Summer Camp 2025 Beach Edition in Warsaw",
+        "link": "https://www.meetup.com/angular-warsaw/events/310498423/"
     }
 ]
