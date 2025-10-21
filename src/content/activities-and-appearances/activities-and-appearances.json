@@ -74,5 +74,12 @@
         "date": "2025-08-28",
         "name": "Angular Summer Camp 2025 Beach Edition in Warsaw",
         "link": "https://www.meetup.com/angular-warsaw/events/310498423/"
+    },
+    {
+        "id": 12,
+        "language": "pl",
+        "date": "2025-10-15",
+        "name": "4Developers Katowice 2025",
+        "link": "https://4developers.org.pl/4developers-katowice-2025/"
     }
 ]
