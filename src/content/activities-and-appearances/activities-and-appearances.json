@@ -76,10 +76,17 @@
         "link": "https://www.meetup.com/angular-warsaw/events/310498423/"
     },
     {
-        "id": 12,
+        "id": "12",
         "language": "pl",
         "date": "2025-10-15",
         "name": "4Developers Katowice 2025",
         "link": "https://4developers.org.pl/4developers-katowice-2025/"
+    },
+    {
+        "id": "13",
+        "language": "pl",
+        "date": "2025-10-24",
+        "name": "Hyland Tech Outreach Workshops for Students",
+        "link": "https://www.hyland.com/en/resources/events/hy-tech"
     }
 ]
