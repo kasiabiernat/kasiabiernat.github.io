@@ -1,6 +1,6 @@
 ---
 title: "Code That Writes Code: Supercharge Your Nx Workspace with Generators and Executors"
-slides: "https://bit.ly/3HuLmQf"
+slides: "https://bit.ly/4hGW5o5"
 repository: "https://github.com/kathrine0/code-that-writes-code"
 ---
 
