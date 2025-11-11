@@ -88,5 +88,12 @@
         "date": "2025-10-24",
         "name": "Hyland Tech Outreach Workshops for Students",
         "link": "https://www.hyland.com/en/resources/events/hy-tech"
+    },
+    {
+        "id": "14",
+        "language": "en",
+        "date": "2025-11-06",
+        "name": "NG-DE Conference 2025",
+        "link": "https://ng-de.org/"
     }
 ]
