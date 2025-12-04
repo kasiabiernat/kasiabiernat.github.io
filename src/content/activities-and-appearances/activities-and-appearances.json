@@ -95,5 +95,12 @@
         "date": "2025-11-06",
         "name": "NG-DE Conference 2025",
         "link": "https://ng-de.org/"
+    },
+    {
+        "id": "15",
+        "language": "en",
+        "date": "2025-11-18",
+        "name": "NG-Poland Conference 2025",
+        "link": "https://ng-poland.pl/"
     }
 ]
