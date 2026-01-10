@@ -102,5 +102,12 @@
         "date": "2025-11-18",
         "name": "NG-Poland Conference 2025",
         "link": "https://ng-poland.pl/"
+    },
+    {
+        "id": "16",
+        "language": "en",
+        "date": "2026-01-10",
+        "name": "D4 Community Online Event",
+        "link": "http://linkedin.com/company/d4community/"
     }
 ]
