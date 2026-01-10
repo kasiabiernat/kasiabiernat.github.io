@@ -1,0 +1,222 @@
+---
+title: "(1/3) Modern Angular Material theming: from the theme to the design tokens"
+description: "Modern Angular Material theming is token-driven and Sass-first. In this article we’ll build the right mental model: what you configure, what gets generated, and why fighting Material with CSS is a long-term trap."
+date: "Jan 10 2026"
+cover: "cover"
+draft: true
+---
+
+I’ve seen it too many times: someone needs to “just tweak” a few Angular Material styles, so they reach for the classic approach—find the CSS class, add a stronger selector, sprinkle a bit of `!important`, ship it.
+
+It works… until the next Angular Material update. Then it doesn’t.
+
+Angular Material is designed to implement Material Design, and in recent years Material Design changed a lot (M2 → M3). With modern Angular Material (v19+), styling is no longer about chasing CSS selectors — it’s about understanding the **theming model** and the **design tokens** it generates.
+
+This is **Post 1 of a 3-part series** on modern approach to styling Angular Material the upgrade-safe way. In this post, I’ll explain the theming APIs:
+
+- what you configure at the theme level (colors, typography, density)
+- what Angular Material generates from it
+- where tokens fit in (and why token names represent intent, not “a nice hex”)
+
+>If the User Interface that you need to implement doesn’t align with Material Design, Angular Material probably isn’t the right foundation. Pick a different component library — or a headless one — instead of trying to “CSS your way out” of a design system.
+
+## Prerequisites
+
+- Basic Angular Material usage
+- Basic Sass knowledge (`@use`, mixins, maps)
+- High-level familiarity with theming concepts (no deep Material 3 spec knowledge required)
+
+## The use case
+
+You want to build an Angular app that:
+
+- matches your product identity (colors + typography)
+- supports light/dark (and ideally other schemes such as high-contrast)
+- stays upgrade-safe when Angular Material changes internals
+
+If you approach this by overriding internal classes, you’re signing up for a maintenance tax. The goal is to stay within the **supported theming surface**.
+
+### What “the right way” to style Angular Material means
+
+The “right way” is:
+
+- **upgrade-safe**
+- **intention-revealing** (expresses design intent, not DOM trivia)
+- **maintainable for teams**
+
+Now let's see how to put this into practice.
+
+## Step 1: define the theme(s) 
+
+Reference: [material.angular.dev/guide/getting-started](https://material.angular.dev/guide/getting-started)
+
+In practice, you’ll put theming code in your global styles entry point (whatever your workspace uses as the main Sass file), and “apply the theme” there.
+
+Concretely, that means: define a theme configuration in Sass (colors **including your palettes**, typography, density) and include the Angular Material theme mixin in your global stylesheet. This is where you “wire up” your palettes (primary/tertiary/etc.) — either by picking one of the built-in palette definitions or by generating custom palettes — and let Material turn those decisions into system token values and component styles. The official step-by-step is in the theming guide: [material.angular.dev/guide/theming](https://material.angular.dev/guide/theming).
+
+```scss
+@use "@angular/material" as mat;
+
+// Global theme application (colors + typography + density)
+html {
+  @include mat.theme((
+    // color: (primary: ..., tertiary: ...),
+    // typography: ...,
+    // density: 0,
+  ));
+}
+```
+
+###   The light/dark mode support
+
+Modern Angular Material themes emit colors using CSS `light-dark(...)`. Let's see how to use it.
+
+- `mat.theme(...)` can emit values like `light-dark(lightValue, darkValue)`
+- the browser only switches between those values when you set `color-scheme`
+- simplest:
+
+```css
+html {
+  color-scheme: light dark;
+}
+```
+
+That makes the browser choose light/dark based on OS preference.
+
+A good practice is to build a manual light/dark mode toggle. You can do it with a class on the `html` element:
+
+```scss
+html {
+  &.theme-light {
+    color-scheme: light;
+  }
+  
+  &.theme-dark {
+    color-scheme: dark;
+  }
+}
+```
+
+```html
+<!-- Force light -->
+<html class="theme-light">
+  <!-- ... -->
+</html>
+
+<!-- Force dark -->
+<html class="theme-dark">
+  <!-- ... -->
+</html>
+```
+
+If you don’t set `color-scheme`, the **light** colors will always be used — and it can look like your “dark theme” is broken.
+
+### Defining alternative themes (e.g. high-contrast)
+
+Besides light/dark, you can define additional theme variants (like **high-contrast**) as separate theme configurations and apply them using a media query:
+
+```scss
+@use "@angular/material" as mat;
+
+html {
+  // default theme
+  @include mat.theme((
+    // ... base theme config ...
+  ));
+}
+
+@media (prefers-contrast: more) {
+  html {
+    @include mat.theme((
+      // ... high-contrast theme config ...
+    ));
+
+    @include mat.strong-focus-indicators(); // optional: make focus indicators stronger for high-contrast theme
+  }
+}
+```
+
+>Tip: you can emulate various CSS media features using the Chrome DevTools "Rendering" tab.
+
+## Design tokens in action
+
+When you define a theme with the `mat.theme(...)` mixin, Angular Material generates a set of CSS variables that are based on the [Material 3 Design Tokens](https://m3.material.io/foundations/design-tokens/overview).
+
+Design tokens are **named design decisions**: instead of hardcoding values (“#6750A4”, “16px”, “4px”), you give them a role and treat that role as the source of truth.
+
+The important part is the *name*: a token encodes **intent**, not a value. That’s how you get consistent results across different contexts (light/dark, contrast modes, brand refreshes) without rewriting a pile of component CSS.
+
+With Angular Material, those “system role” tokens show up as CSS variables prefixed with `--mat-sys-*`.The names are the key:
+
+- **`primary` vs `on-primary`**: `--mat-sys-primary` is a prominent background/accent color; `--mat-sys-on-primary` is the text/icon color that’s designed to be readable *on top of it* ([Material 3 color roles](https://m3.material.io/styles/color/roles)).
+- **`*-container` roles**: `--mat-sys-primary-container` is meant for larger, lower-emphasis surfaces (think “tinted card / selected row”), paired with `--mat-sys-on-primary-container` for readable content on that surface.
+- **Error roles**: `--mat-sys-error` / `--mat-sys-on-error` are for critical error emphasis, while `--mat-sys-error-container` / `--mat-sys-on-error-container` are for error *surfaces* (like an inline error banner).
+
+For example:
+
+```css
+/* An error message surface (not screaming red, but clearly “error”) */
+.error-banner {
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+```
+
+Tokens also cover **typography roles** — not “font size 16”, but “body text that should look like body text”. For example, `--mat-sys-body-large` is a complete shorthand `font` value you can apply directly:
+
+```css
+.prose {
+  font: var(--mat-sys-body-large);
+  letter-spacing: var(--mat-sys-body-large-tracking);
+  color: var(--mat-sys-on-surface);
+}
+```
+
+There are also tokens for border radius values (Angular Material calls it Shape), border colors and shadows (Angular Material calls it Elevation).
+
+A documented list of Angular Material system variables is available here: [https://material.angular.dev/guide/theming-your-components](https://material.angular.dev/guide/theming-your-components).
+
+## The Hierarchy of Design Tokens
+
+The design tokens are hierarchical. The reference tokens have associated value, the system tokens inherit from the reference tokens and the component tokens inherit from the system tokens.
+
+```text
+Reference tokens
+  → system tokens (global design language)
+    → component tokens (component-specific mapping)
+```
+
+Angular Material mirrors that architecture:
+
+```text
+your theme config (color / typography / density)
+  → generated CSS variables (system token values like `--mat-sys-*`)
+    → internal component css variables (like `--mat-button-*`)
+```
+
+Let's see the MatButton component as an example. The button uses the component-level token with a fallback to the system token:
+
+```css
+.mat-mdc-unelevated-button:not(:disabled) {
+    color: var(--mat-button-filled-label-text-color, var(--mat-sys-on-primary));
+    background-color: var(--mat-button-filled-container-color, var(--mat-sys-primary));
+}
+```
+
+## Conclusion
+
+Modern application styling becomes much simpler once you stop thinking in “CSS selectors” and start thinking in “theme decisions → token roles → component consumption”.
+
+In the next post, we’ll go concrete: how to pick the right `--mat-sys-*` token by intent, with practical patterns you can apply immediately.
+
+## Next in this series
+
+- **[Part 2: How to pick the right system token](/blog/06_2-modern-angular-material-modern-theming/)** — Learn how to pick the right `--mat-sys-*` token for backgrounds, text, errors, and typography.
+- **[Part 3: Upgrade-Safe Overrides](/blog/06_3-modern-angular-material-modern-theming/)** — The Overrides API, component tokens, and why overriding internals is an upgrade-hostile trap.
+
+## Further reading
+
+- Angular Material getting started: [material.angular.dev/guide/getting-started](https://material.angular.dev/guide/getting-started)
+- Angular Material theming: [material.angular.dev/guide/theming](https://material.angular.dev/guide/theming)
+- Material 3 design tokens overview: [m3.material.io/foundations/design-tokens/overview](https://m3.material.io/foundations/design-tokens/overview)
+

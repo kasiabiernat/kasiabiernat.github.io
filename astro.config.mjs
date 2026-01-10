@@ -8,6 +8,14 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   site: "https://kasiabiernat.github.io",
   integrations: [mdx(), sitemap(), tailwind()],
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: "github-light",
+        dark: "github-dark",
+      },
+    },
+  },
   experimental: {
     contentLayer: true,
   },

@@ -11,6 +11,12 @@ html.dark {
   color-scheme: dark;
 }
 
+html.dark .astro-code,
+html.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+} 
+
 html,
 body {
   @apply size-full;
@@ -41,6 +47,12 @@ article {
   @apply max-w-full prose dark:prose-invert prose-img:mx-auto prose-img:my-auto;
   @apply prose-headings:font-semibold prose-p:font-serif;
   @apply prose-headings:text-black prose-headings:dark:text-white;
+}
+
+article :not(pre) > code {
+  @apply bg-black/5 dark:bg-white/10;
+  @apply px-1.5 py-0.5 rounded;
+  @apply font-normal;
 }
 
 @layer utilities {

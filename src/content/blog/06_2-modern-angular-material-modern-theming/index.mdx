@@ -1,0 +1,204 @@
+---
+title: "(2/3) Modern Angular Material theming: how to pick the right system token"
+description: "System tokens represent semantic intent, not random colors. Learn how to pick the right --mat-sys-* token for backgrounds, text, errors, and typography — and how to style your custom components the theme-friendly way."
+date: "Jan 11 2026"
+cover: "cover"
+draft: true
+---
+
+In [Part 1](/blog/06_1-modern-angular-material-modern-theming/) of this series, we covered the modern Angular Material theming model: how you define a theme, what gets generated, and why tokens matter. You now know that `--mat-sys-*` variables exist.
+
+But *which one* do you actually use?
+
+This is **Part 2 of a 3-part series** on modern approach to styling Angular Material the upgrade-safe way. In this post, we'll get practical: how to pick the right system token based on **intent**, and how to style your own custom components so they stay aligned with the Material theme.
+
+## Prerequisites
+
+- You've read [Part 1](/blog/06_1-modern-angular-material-modern-theming/) (or already understand the theming model)
+- Basic CSS custom properties knowledge
+
+## System tokens represent purpose, not "a color"
+
+When you look at `--mat-sys-primary`, you might think "oh, that's my brand color". Technically, yes — but the *name* tells you something more important: **where to use it**.
+
+System tokens are **semantic**. You pick them based on *what the UI element means* — not based on the underlying hex value. That's how the UI adapts when you switch themes, toggle dark mode, or add high-contrast support: the *intent* stays the same, but the *value* changes.
+
+Reference: [Material 3 color roles](https://m3.material.io/styles/color/roles)
+
+## Color tokens: roles and "on-*" pairs
+
+The most common tokens you'll use are color roles. Here's how to think about them:
+
+### Emphasis backgrounds (primary/secondary/tertiary)
+
+These are your "brand" or "action emphasis" colors:
+
+- `--mat-sys-primary` — the main emphasis color (primary buttons, active states)
+- `--mat-sys-secondary` — supporting emphasis (less prominent than primary)
+- `--mat-sys-tertiary` — accent emphasis (even less prominent)
+
+Each has a **container** variant for larger, lower-emphasis surfaces:
+
+- `--mat-sys-primary-container` — tinted backgrounds (selected rows, cards with emphasis)
+- `--mat-sys-secondary-container`
+- `--mat-sys-tertiary-container`
+
+### The "on-*" pattern
+
+For every background token, there's a matching text/icon token designed to be **legible on top of it**:
+
+- `--mat-sys-primary` → `--mat-sys-on-primary`
+- `--mat-sys-primary-container` → `--mat-sys-on-primary-container`
+- `--mat-sys-secondary` → `--mat-sys-on-secondary`
+- `--mat-sys-error` → `--mat-sys-on-error`
+
+This pairing is how Material guarantees contrast. Always use them together:
+
+```css
+.cta-button {
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+}
+```
+
+### Surface tokens (neutral backgrounds)
+
+For general content areas — not brand-emphasized — use surface tokens:
+
+- `--mat-sys-surface` — base content background
+- `--mat-sys-surface-variant` — slightly differentiated (sidebars, secondary panels)
+- `--mat-sys-surface-container-highest` — highest emphasis surface container
+
+Pair with:
+
+- `--mat-sys-on-surface` — main text on surfaces
+- `--mat-sys-on-surface-variant` — secondary/muted text
+
+```css
+.content-panel {
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+}
+
+.muted-caption {
+  color: var(--mat-sys-on-surface-variant);
+}
+```
+
+### Error tokens
+
+For validation errors, alerts, and critical states:
+
+- `--mat-sys-error` — strong error emphasis (error icons, inline error text)
+- `--mat-sys-error-container` — error surfaces (banners, error cards)
+- `--mat-sys-on-error` — text/icons on `error` background
+- `--mat-sys-on-error-container` — text on `error-container` background
+
+```css
+.error-banner {
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+.error-icon {
+  color: var(--mat-sys-error);
+}
+```
+
+### Border and divider tokens
+
+For outlines and separators:
+
+- `--mat-sys-outline` — standard borders
+- `--mat-sys-outline-variant` — subtle dividers
+
+### Elevation tokens
+
+For shadows (Material calls this "elevation"):
+
+- `--mat-sys-level0` through `--mat-sys-level5`
+
+```css
+.floating-card {
+  box-shadow: var(--mat-sys-level2);
+}
+```
+
+## Typography tokens: text roles, not font sizes
+
+Just like color tokens encode *purpose*, typography tokens encode **text role** — not "16px bold".
+
+The main typography roles are:
+
+| Role | Use case |
+|------|----------|
+| `display-*` | Hero text, splash screens |
+| `headline-*` | Page titles, section headers |
+| `title-*` | Card titles, dialog headers |
+| `body-*` | Paragraph text, descriptions |
+| `label-*` | Buttons, form labels, chips |
+
+Each role has three sizes: `large`, `medium`, `small`.
+
+Typography tokens are **shorthand font values** — you apply them directly:
+
+```css
+.page-title {
+  font: var(--mat-sys-headline-large);
+  letter-spacing: var(--mat-sys-headline-large-tracking);
+  color: var(--mat-sys-on-surface);
+}
+
+.body-text {
+  font: var(--mat-sys-body-medium);
+  letter-spacing: var(--mat-sys-body-medium-tracking);
+}
+
+.button-label {
+  font: var(--mat-sys-label-large);
+  letter-spacing: var(--mat-sys-label-large-tracking);
+}
+```
+
+Note the `-tracking` suffix — that's the letter-spacing subtoken. Apply it alongside the main font token for full typographic fidelity.
+
+## Styling custom components with Material tokens
+
+Usually, building an app with only Angular Material "building blocks" isn't enough. Real products have domain-specific UI: custom dashboards, bespoke cards, specialized list items. Angular Material doesn't ship components for every business need.
+
+The recommendation: **style your custom components using Material token values** instead of hardcoding colors, font sizes, or spacing.
+
+### Why?
+
+- Your custom components stay **responsive to theme changes**
+- They adapt to **light/dark mode** automatically (as long as your theme supports it)
+- They align visually with the rest of the Material UI without extra work
+
+### Read vs. write: the important rule
+
+There's one rule to remember:
+
+- **Read** tokens in your component CSS: `color: var(--mat-sys-on-surface)`
+- **Write/override** token values via Sass overrides APIs (we'll cover this in Part 3), not by manually setting `--mat-*` in raw CSS
+
+Treat `--mat-*` variables as **read-only** in your component stylesheets. If you need to *change* the values that Angular Material components consume, do it through the supported Sass override APIs.
+
+## Summary
+
+System tokens are how you express **design intent** in code. Once you internalize the naming patterns — `primary` vs `on-primary`, `surface` vs `on-surface`, `error-container` vs `on-error-container` — picking the right token becomes second nature.
+
+Your custom components should consume these tokens too. That's how you get a cohesive UI that adapts to theme changes without maintenance overhead.
+
+In [the next post](/blog/06_3-modern-angular-material-modern-theming/), we'll cover what happens when you need a **targeted deviation**: the Overrides API, component tokens, and why overriding internals is an upgrade-hostile trap.
+
+## This series
+
+- **[Part 1: From the theme to the design tokens](/blog/06_1-modern-angular-material-modern-theming/)** — What you configure, what gets generated, and why fighting Material with CSS is a long-term trap.
+- **Part 2: How to pick the right system token** (this article)
+- **[Part 3: Upgrade-Safe Overrides](/blog/06_3-modern-angular-material-modern-theming/)** — The Overrides API, component tokens, and why overriding internals is an upgrade-hostile trap.
+
+## Further reading
+
+- Material 3 color roles: [m3.material.io/styles/color/roles](https://m3.material.io/styles/color/roles)
+- Angular Material theming your components: [material.angular.dev/guide/theming-your-components](https://material.angular.dev/guide/theming-your-components)
+- Material 3 design tokens overview: [m3.material.io/foundations/design-tokens/overview](https://m3.material.io/foundations/design-tokens/overview)

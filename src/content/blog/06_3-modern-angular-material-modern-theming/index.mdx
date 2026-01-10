@@ -1,0 +1,145 @@
+---
+title: "(3/3) Modern Angular Material theming: upgrade-safe overrides"
+description: "Need a one-off styling deviation? Learn the two supported override surfaces (system + component), why overriding component tokens directly is brittle, and why touching internal CSS classes is an upgrade-hostile trap."
+date: "Jan 12 2026"
+cover: "cover"
+draft: true
+---
+
+At some point, every team runs into it.
+
+The design system is mostly fine, your theme is configured, your custom components read system tokens… and then you get a requirement like:
+
+>“This particular card needs slightly different padding and a different header typography.”
+
+This is where the Overrides API exists — and where a lot of projects accidentally fall back into brittle CSS overrides.
+
+> This is **Part 3 of a 3-part series** on styling Angular Material the upgrade-safe way. See also [Part 1: From the theme to the design tokens](/blog/06_1-modern-angular-material-modern-theming/) and [Part 2: How to pick the right system token](/blog/06_2-modern-angular-material-modern-theming/). In this post, I'll explain the Overrides API in plain English: what it is, when to use it, and why it's better than overriding component tokens directly.
+
+## Prerequisites
+
+- You’re using the modern theming APIs (v19+)
+- You understand system tokens
+
+## The use case
+
+You need a **targeted deviation** that:
+
+- doesn’t fork your entire theme
+- doesn’t depend on private DOM structure
+- survives library upgrades
+
+## Component tokens: internal wiring (and why you shouldn’t target it directly)
+
+Angular Material components implement their styles internally. Conceptually:
+
+```text
+theme decisions → system token values → component styling (internal tokens)
+```
+
+Some of those “component-level” decisions are expressed as tokens under the hood — but many of them are **not** a stable/public surface.
+
+That’s why directly overriding component tokens is risky:
+
+- token names/structure can change between versions
+- your override can silently stop applying
+- you won’t necessarily get a build-time error — just a UI drift
+
+## The Overrides API: two supported override surfaces
+
+Reference: [material.angular.dev/guide/theming](https://material.angular.dev/guide/theming)
+
+The docs describe two supported override surfaces:
+
+### 1) System token overrides
+
+Use system overrides when you want to change a global design decision that components consume.
+
+```scss
+.example-orange-primary-container {
+  @include mat.theme-overrides((
+    primary-container: #84ffff
+  ));
+}
+```
+
+this will override the `--mat-sys-primary-container` variable value for the entire application **in the scope of the selector**. Note, that if you just hardcode the value, it won't be design-proof when theme (or dark/light mode) is changed.
+
+### 2) Component token overrides (per component)
+
+Use component overrides when you want a targeted deviation for a specific component family.
+
+This usually looks like a per-component mixin, for example:
+
+```scss
+@include mat.card-overrides((
+  outlined-container-color: var(--mat-sys-primary-container),
+  title-text-size: var(--mat-sys-headline-medium-size),
+));
+```
+
+Of course, you can override with your own values, but it's better to use the system tokens as this will ensure that the override is compatible with the theme.
+
+## Why Overrides API is better than “just override the component token”
+
+Overrides API is generally **more upgrade-safe** than targeting internal component-level tokens.
+
+The component level tokens are internal implementation details and can change between versions. In a contrary, the Overrides API is a documented and supported API.
+
+Let's imagine following scenario:
+- You want to override the card component to have a different container color
+- You inspect the component code and see that the container color is set using the `--mat-card-outlined-container-color` variable
+- You override the token with your own value
+
+This will work, but if the token is removed in the future, your override will simply stop showing and you will not be explicitly notified.
+
+With Overrides API, you would change the container color with:
+```scss
+@include mat.card-overrides((
+  outlined-container-color: var(--mat-sys-primary-container),
+));
+```
+If in the future the Angular Material team decides to remove the `outlined-container-color` property, you will get a build-time error, because of the additional validation layer: `Invalid token name outlined-container-color. Valid tokens are: ...`
+
+## Overriding internals is dangerous (and not future-proof)
+
+Angular Material discourages overriding component CSS outside the theming APIs.
+
+Internal DOM structure and CSS classes are private implementation details.
+
+If you override internals, you’re coupling your app to:
+
+- a specific DOM structure
+- a specific set of class names
+- a specific internal styling strategy
+
+...and none of those are guaranteed to remain stable.
+
+### Red flags checklist
+
+- you’re using deep selectors or `::ng-deep`
+- your selector depends on internal DOM nesting
+- you need `!important` to “win”
+- your styling breaks when a component adds/loses a wrapper element
+
+## Summary
+
+The modern Angular Material theming model gives you a clean contract:
+
+- theme config defines product-wide decisions
+- system tokens represent intent
+- overrides give you controlled exceptions
+
+If you follow that contract, upgrades become boring — in the best way.
+
+## This series
+
+- **[Part 1: From the theme to the design tokens](/blog/06_1-modern-angular-material-modern-theming/)** — What you configure, what gets generated, and why fighting Material with CSS is a long-term trap.
+- **[Part 2: How to pick the right system token](/blog/06_2-modern-angular-material-modern-theming/)** — Learn how to pick the right `--mat-sys-*` token for backgrounds, text, errors, and typography.
+- **Part 3: Upgrade-Safe Overrides** (this article)
+
+## Further reading
+
+- Angular Material theming: [material.angular.dev/guide/theming](https://material.angular.dev/guide/theming)
+- Angular Material theming your components: [material.angular.dev/guide/theming-your-components](https://material.angular.dev/guide/theming-your-components)
+
