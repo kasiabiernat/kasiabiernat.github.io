@@ -109,5 +109,12 @@
         "date": "2026-01-10",
         "name": "D4 Community Online Event",
         "link": "https://www.commudle.com/communities/d4-community/events/code-that-writes-code"
+    },
+    {
+        "id": "17",
+        "language": "pl",
+        "date": "2026-02-12",
+        "name": "meet.js Wrocław",
+        "link": "https://crossweb.pl/en/events/meet-js-wroclaw-2026-02-12-15th-anniversary/"
     }
 ]
