@@ -116,5 +116,12 @@
         "date": "2026-02-12",
         "name": "meet.js Wrocław",
         "link": "https://crossweb.pl/en/events/meet-js-wroclaw-2026-02-12-15th-anniversary/"
+    },
+    {
+        "id": "18",
+        "language": "en",
+        "date": "2026-03-13",
+        "name": "Angular Meetup Graz - Spring Opening",
+        "link": "https://www.meetup.com/pl-pl/angular-meetup-graz/events/312954900/"
     }
 ]
