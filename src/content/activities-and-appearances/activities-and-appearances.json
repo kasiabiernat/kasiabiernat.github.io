@@ -123,5 +123,12 @@
         "date": "2026-03-13",
         "name": "Angular Meetup Graz - Spring Opening",
         "link": "https://www.meetup.com/pl-pl/angular-meetup-graz/events/312954900/"
+    },
+    {
+        "id": "19",
+        "language": "en",
+        "date": "2026-03-25",
+        "name": "NX Wrocław Meetup #2",
+        "link": "https://www.meetup.com/pl-pl/nx-wroclaw/events/313648614"
     }
 ]
